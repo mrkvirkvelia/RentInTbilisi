@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Tbilisi Agents Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    body { margin:0; display:flex; height:100vh; }
+    #map { flex:1; }
+    #sidebar { width:300px; overflow:auto; padding:1em; background:#f9f9f9; }
+    table { width:100%; border-collapse:collapse; }
+    td, th { border:1px solid #ccc; padding:5px; }
+  </style>
+</head>
+<body>
+  <div id="sidebar">
+    <h2>Agents by District</h2>
+    <table>
+      <tr><th>District</th><th>Agent</th></tr>
+      <tr><td>Vake</td><td>Giorgi Beselia</td></tr>
+      <tr><td>Saburtalo</td><td>Sergi Tibelashvili</td></tr>
+      <tr><td>Mtatsminda</td><td>Shorena Jvaridze</td></tr>
+      <tr><td>Didube</td><td>Daniil Gamkrelidze</td></tr>
+      <tr><td>Gldani</td><td>Irakli Sangulia</td></tr>
+      <tr><td>Isani</td><td>Victoria Eliboshvili</td></tr>
+      <tr><td>Krtsanisi</td><td>Omari Mdzevashvili</td></tr>
+      <tr><td>Chugureti</td><td>Mohammed Shafi Elliyas</td></tr>
+      <tr><td>Nadzaladevi</td><td>Vitaly Tavrel</td></tr>
+      <tr><td>Vere</td><td>David Kazakov</td></tr>
+      <tr><td>Sololaki</td><td>Alex Kharitonashvili</td></tr>
+      <tr><td>Abanoubani</td><td>Maksim Lavilin</td></tr>
+      <tr><td>Avlabari</td><td>Arkadiy Logunov</td></tr>
+    </table>
+  </div>
+  <div id="map"></div>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    const map = L.map('map').setView([41.7151, 44.8271], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a>'
+    }).addTo(map);
+
+    const markers = [
+      { name: "Vake", lat: 41.7094, lng: 44.7506, agent: "Giorgi Beselia" },
+      { name: "Saburtalo", lat: 41.7206, lng: 44.7568, agent: "Sergi Tibelashvili" },
+      { name: "Mtatsminda", lat: 41.6936, lng: 44.8008, agent: "Shorena Jvaridze" },
+      { name: "Didube", lat: 41.7284, lng: 44.7833, agent: "Daniil Gamkrelidze" },
+      { name: "Gldani", lat: 41.7783, lng: 44.8121, agent: "Irakli Sangulia" },
+      { name: "Isani", lat: 41.7158, lng: 44.8503, agent: "Victoria Eliboshvili" },
+      { name: "Krtsanisi", lat: 41.6849, lng: 44.8232, agent: "Omari Mdzevashvili" },
+      { name: "Chugureti", lat: 41.7177, lng: 44.8012, agent: "Mohammed Shafi Elliyas" },
+      { name: "Nadzaladevi", lat: 41.7522, lng: 44.7820, agent: "Vitaly Tavrel" },
+      { name: "Vere", lat: 41.7060, lng: 44.7794, agent: "David Kazakov" },
+      { name: "Sololaki", lat: 41.6892, lng: 44.8071, agent: "Alex Kharitonashvili" },
+      { name: "Abanoubani", lat: 41.6886, lng: 44.8106, agent: "Maksim Lavilin" },
+      { name: "Avlabari", lat: 41.6931, lng: 44.8202, agent: "Arkadiy Logunov" }
+    ];
+
+    markers.forEach(m => {
+      L.marker([m.lat, m.lng]).addTo(map).bindPopup(`<b>${m.name}</b><br>${m.agent}`);
+    });
+  </script>
+</body>
+</html>
