@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.4">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; -webkit-text-stroke: #000000}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; -webkit-text-stroke: #000000; min-height: 14.0px}
+    span.s1 {font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
+<p class="p1"><span class="s1">&lt;html&gt;</span></p>
+<p class="p1"><span class="s1">&lt;head&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;title&gt;Карта агентов по районам Тбилиси&lt;/title&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;meta charset="utf-8" /&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" /&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;style&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>#map { height: 100vh; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
+<p class="p1"><span class="s1">&lt;body&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;div id="map"&gt;&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"&gt;&lt;/script&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const map = L.map('map').setView([41.7151, 44.8271], 12); // Центр Тбилиси</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>attribution: '&amp;copy; OpenStreetMap contributors'</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}).addTo(map);</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>// Центры районов Тбилиси</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>const districtCoords = {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>'Vake': [41.705, 44.780],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>'Saburtalo': [41.728, 44.749],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>'Didube': [41.741, 44.791],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>'Gldani': [41.802, 44.826],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>'Isani': [41.713, 44.853],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>'Krtsanisi': [41.690, 44.820],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>'Mtatsminda': [41.693, 44.796],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>'Chugureti': [41.716, 44.802],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>'Nadzaladevi': [41.754, 44.787],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>'Vere': [41.700, 44.775],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>'Sololaki': [41.691, 44.804],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>'Abanoubani': [41.692, 44.810],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>'Avlabari': [41.693, 44.818]</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>};</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>// Загрузка CSV и построение маркеров</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQX-Skh3xATxwyj0NOoN3sw6Mr3ja7j5nkRymuDeG1ldJtAwhUUlCjGG1-GlrTeBlx1z47lO-uM1rVV/pub?gid=634347005&amp;single=true&amp;output=csv')</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.then(response =&gt; response.text())</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.then(csv =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const rows = csv.trim().split('\n').slice(1); // Пропускаем заголовок</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const districtAgents = {};</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>rows.forEach(row =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const [district, agent] = row.split(',');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>if (!districtAgents[district]) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>districtAgents[district] = [];</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>districtAgents[district].push(agent);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>});</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>Object.entries(districtAgents).forEach(([district, agents]) =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const coords = districtCoords[district];</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>if (!coords) return;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const popupContent = `&lt;b&gt;${district}&lt;/b&gt;&lt;br&gt;` +</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>agents.map((a, i) =&gt; `Агент ${i + 1}: ${a}`).join('&lt;br&gt;');</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>L.marker(coords).addTo(map)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>.bindPopup(popupContent);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>});</span></p>
+<p class="p1"><span class="s1">&lt;/script&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
+</body>
+</html>
