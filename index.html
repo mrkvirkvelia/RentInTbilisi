@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Карта агентов по секторам</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <style>
+    * { box-sizing: border-box; }
+    body, html { margin: 0; padding: 0; height: 100%; font-family: sans-serif; }
+    #container { display: flex; flex-direction: row; height: 100%; }
+    #sidebar {
+      width: 300px;
+      overflow-y: auto;
+      padding: 10px;
+      border-right: 1px solid #ccc;
+      background: #f9f9f9;
+    }
+    #map { flex-grow: 1; }
+    .leader { font-weight: bold; margin-top: 10px; }
+    .agent {
+      margin-left: 10px;
+      cursor: pointer;
+      color: #0077cc;
+    }
+    .agent:hover {
+      text-decoration: underline;
+    }
+    @media (max-width: 600px) {
+      #container { flex-direction: column; }
+      #sidebar { width: 100%; height: 300px; border-right: none; border-bottom: 1px solid #ccc; }
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="sidebar">Загрузка данных...</div>
+    <div id="map"></div>
+  </div>
+
+  <!-- Leaflet и PapaParse -->
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+  <script>
+    const agentsUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnniV_4zdbgaGHY31VrdvsQhF6u3-bMlDaovj27uuyhAmAYFalAbe_-d5ZPdND1L2KovQMH_bfJz-i/pub?gid=1302622492&single=true&output=csv";
+    const sectorsUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQX-Skh3xATxwyj0NOoN3sw6Mr3ja7j5nkRymuDeG1ldJtAwhUUlCjGG1-GlrTeBlx1z47lO-uM1rVV/pub?gid=2081949332&single=true&output=csv";
+
+    const map = L.map('map').setView([41.7151, 44.8271], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    let sectorCoords = {};
+    let markers = {};
+
+    function loadCSV(url, callback) {
+      Papa.parse(url, {
+        download: true,
+        header: true,
+        complete: function(results) {
+          callback(results.data);
+        }
+      });
+    }
+
+    function createSidebar(agents) {
+      const container = document.getElementById("sidebar");
+      container.innerHTML = "";
+
+      const grouped = {};
+      agents.forEach(a => {
+        if (!grouped[a.leader]) grouped[a.leader] = [];
+        grouped[a.leader].push(a);
+      });
+
+      for (const leader in grouped) {
+        const leaderDiv = document.createElement("div");
+        leaderDiv.className = "leader";
+        leaderDiv.textContent = leader;
+        container.appendChild(leaderDiv);
+
+        grouped[leader].forEach(agent => {
+          const agentDiv = document.createElement("div");
+          agentDiv.className = "agent";
+          agentDiv.textContent = agent.name;
+          agentDiv.onclick = () => highlightAgent(agent);
+          container.appendChild(agentDiv);
+        });
+      }
+    }
+
+    function highlightAgent(agent) {
+      const marker = markers[agent.sector];
+      if (marker) {
+        map.setView(marker.getLatLng(), 14);
+        marker.openPopup();
+      }
+    }
+
+    loadCSV(sectorsUrl, function(sectors) {
+      sectors.forEach(s => {
+        sectorCoords[s.name] = [parseFloat(s.lat), parseFloat(s.lng)];
+      });
+
+      loadCSV(agentsUrl, function(agents) {
+        createSidebar(agents);
+        agents.forEach(agent => {
+          const coord = sectorCoords[agent.sector];
+          if (coord) {
+            const marker = L.marker(coord).addTo(map)
+              .bindPopup(`<b>${agent.name}</b><br>Куратор: ${agent.leader}<br>Сектор: ${agent.sector}`);
+            markers[agent.sector] = marker;
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
