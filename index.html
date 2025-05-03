@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.4">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Agents Map - Weekly Rotation&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>body, html { margin: 0; padding: 0; height: 100%; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>#map { height: 100vh; width: 100vw; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="map"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script src="https://unpkg.com/leaflet/dist/leaflet.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Список агентов</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const agents = [</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Omari Mdzaveshvili", "Semyon Petunin", "Artem Petunin", "Maksim Lavilin",</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Giga Gaganashvili", "Giorgi Beselia", "Zaza Kvitsiani", "Vladislav Ivliev",</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"David Kazakov", "Shorena Jvaridze", "Vitaly Travert", "Arkadiy Logunov"</p>
+<p class="p1"><span class="Apple-converted-space">    </span>];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Районы с координатами</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const districts = [</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Vake", coords: [41.7095, 44.7758] },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Saburtalo", coords: [41.7251, 44.7692] },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Didube", coords: [41.7415, 44.7930] },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Isani", coords: [41.7150, 44.8401] },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Mtatsminda", coords: [41.6935, 44.8015] },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Chugureti", coords: [41.7070, 44.8011] }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Получить номер недели в году</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function getWeekNumber() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const now = new Date();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const start = new Date(now.getFullYear(), 0, 1);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const diff = now - start + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60000);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return Math.floor(diff / (7 * 24 * 60 * 60 * 1000));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Перемешивание с фиксированной "солью"</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function seededShuffle(array, seed) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>let a = array.slice();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>for (let i = a.length - 1; i &gt; 0; i--) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>seed = (seed * 9301 + 49297) % 233280;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const j = Math.floor((seed / 233280) * (i + 1));</p>
+<p class="p1"><span class="Apple-converted-space">        </span>[a[i], a[j]] = [a[j], a[i]];</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return a;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Распределить агентов по районам (по 2 на район)</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const week = getWeekNumber();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const shuffledAgents = seededShuffle(agents, week);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const assignments = districts.map((district, i) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>district: district,</p>
+<p class="p1"><span class="Apple-converted-space">        </span>agents: shuffledAgents.slice(i * 2, i * 2 + 2)</p>
+<p class="p1"><span class="Apple-converted-space">      </span>};</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Инициализация карты</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const map = L.map('map').setView([41.7151, 44.7931], 12);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Подключение базовой карты</p>
+<p class="p1"><span class="Apple-converted-space">    </span>L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>attribution: '&amp;copy; OpenStreetMap contributors'</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}).addTo(map);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Добавление районов и агентов</p>
+<p class="p1"><span class="Apple-converted-space">    </span>assignments.forEach(item =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const marker = L.marker(item.district.coords).addTo(map);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>marker.bindPopup(`&lt;b&gt;${item.district.name}&lt;/b&gt;&lt;br&gt;${item.agents.join('&lt;br&gt;')}`);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
