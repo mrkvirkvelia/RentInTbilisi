@@ -1,0 +1,60 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+#app {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+#agents {
+  width: 25%;
+  background-color: #1d3560;
+  color: white;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+#agents h2 {
+  margin-top: 0;
+}
+
+#agent-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+#agent-list li {
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  cursor: pointer;
+}
+
+#agent-list li.leader {
+  font-weight: bold;
+}
+
+#map {
+  flex: 1;
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  #app {
+    flex-direction: column;
+  }
+
+  #agents {
+    width: 100%;
+    height: 40%;
+  }
+
+  #map {
+    height: 60%;
+  }
+}
